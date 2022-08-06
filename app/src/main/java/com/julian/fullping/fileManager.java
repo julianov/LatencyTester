@@ -27,7 +27,7 @@ public class fileManager {
         this.filename=filename;
     }
 
-    private boolean if_exists(){
+    boolean if_exists(){
         File file = new File(filename);
         if (file.exists() && file.isFile())
             return true;
@@ -40,7 +40,7 @@ public class fileManager {
         return file.delete();
     }
 
-    private boolean writeDataToFile(Context cont,String data) throws FileNotFoundException {
+    boolean writeDataToFile(Context cont,String data) throws FileNotFoundException {
         try {
             FileOutputStream fos = cont.openFileOutput(filename, MODE_PRIVATE);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
@@ -55,7 +55,7 @@ public class fileManager {
         }
     }
 
-    private String readDataFromFile(Context cont) {
+    String readDataFromFile(Context cont) {
         try {
             FileInputStream fis = cont.openFileInput(filename);
             InputStreamReader isr = new InputStreamReader(fis);

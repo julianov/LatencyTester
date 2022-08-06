@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.julian.fullping.R;
+import com.julian.fullping.guardar_datos;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,6 +49,7 @@ public class HomeFragment extends Fragment {
 
     private TextView txt;
     private Button btn;
+    private Button btn_save;
 
     EditText gethost;
     TextView maximo, minimo, promedio, visualizacion, pingvalue, paquetesenviados, paquetesperdidos;
@@ -118,6 +122,8 @@ public class HomeFragment extends Fragment {
                 if(btn.getText().equals("Ping")) {
                     if(checkWifiOnAndConnected())
                     {
+                        btn_save.setVisibility(View.VISIBLE);
+
                         enviados=0;
                         host = gethost.getText().toString();
                         if (executeCommand()) {
@@ -180,6 +186,33 @@ public class HomeFragment extends Fragment {
                     average=0;
                     min=0;
                     max=0;
+                }
+            }
+        });
+
+        btn_save = (Button) root.findViewById(R.id.button5);
+        btn_save.setVisibility(View.INVISIBLE);
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+
+                if (fm != null) {
+                    // Perform the FragmentTransaction to load in the list tab content.
+                    // Using FragmentTransaction#replace will destroy any Fragments
+                    // currently inside R.id.fragment_content and add the new Fragment
+                    // in its place.
+
+
+                    String datos=host+"%"+String.valueOf(enviados)+"%"+String.valueOf(average)+"%"+String.valueOf(min)+"%"+String.valueOf(max)+"%"+String.valueOf(packagelost);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("datos",datos);
+                    Fragment fragment = new guardar_datos();
+                    fragment.setArguments(bundle);
+
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, fragment);
+                    ft.commit();
                 }
             }
         });
