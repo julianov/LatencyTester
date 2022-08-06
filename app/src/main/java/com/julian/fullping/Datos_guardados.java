@@ -105,7 +105,7 @@ public class Datos_guardados extends Fragment {
                                              if (fm != null) {
                                              Bundle bundle = new Bundle();
                                              bundle.putString("datos",array_datos[position]);
-                                             Fragment fragment = new guardar_datos();
+                                             Fragment fragment = new dato_seleccionado();
                                              fragment.setArguments(bundle);
 
                                              FragmentTransaction ft = fm.beginTransaction();

@@ -2,12 +2,16 @@ package com.julian.fullping;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.julian.fullping.ui.home.HomeFragment;
 
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
@@ -119,9 +123,34 @@ public class guardar_datos extends Fragment {
                 try {
                     archivo.writeDataToFile(getActivity().getApplicationContext(), datos);
 
+                    Toast.makeText(getActivity().getApplicationContext(), "DATA SAVED", Toast.LENGTH_LONG).show();
+                    FragmentManager fm = getFragmentManager();
+
+                    if (fm != null) {
+                        // Perform the FragmentTransaction to load in the list tab content.
+                        // Using FragmentTransaction#replace will destroy any Fragments
+                        // currently inside R.id.fragment_content and add the new Fragment
+                        // in its place.
+                        Fragment fragment = new HomeFragment();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.replace(R.id.container, fragment);
+                        ft.commit();
+                    }
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    FragmentManager fm = getFragmentManager();
+
+                    if (fm != null) {
+                        // Perform the FragmentTransaction to load in the list tab content.
+                        // Using FragmentTransaction#replace will destroy any Fragments
+                        // currently inside R.id.fragment_content and add the new Fragment
+                        // in its place.
+                        Fragment fragment = new HomeFragment();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.replace(R.id.container, fragment);
+                        ft.commit();
+                    }
                 }
             }
         });
