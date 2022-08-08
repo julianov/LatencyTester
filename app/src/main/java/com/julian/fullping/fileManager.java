@@ -1,6 +1,7 @@
 package com.julian.fullping;
 
         import android.content.Context;
+        import android.util.Log;
 
         import java.io.File;
         import java.io.FileInputStream;
@@ -35,12 +36,13 @@ public class fileManager {
             return false;
     }
 
-    private boolean delete(){
+    boolean delete(){
         File file = new File(filename);
         return file.delete();
     }
 
     boolean writeDataToFile(Context cont,String data) throws FileNotFoundException {
+        Log.d("datos a escribir", data);
         try {
             FileOutputStream fos = cont.openFileOutput(filename, MODE_PRIVATE);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
@@ -64,11 +66,20 @@ public class fileManager {
             int charRead;
             while ((charRead = isr.read(inputBuffer)) > 0) {
                 String readString = String.copyValueOf(inputBuffer, 0, charRead);
-                cadena += readString;
+                if (readString!=null){
+                    cadena += readString;
+                }
                 inputBuffer = new char[100];
             }
             isr.close();
-            return cadena;
+            Log.d("cadena", cadena);
+
+            if(cadena!=null){
+                return cadena;
+            }else{
+                return "";
+            }
+
         }
         catch (IOException ex) {
             ex.printStackTrace();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
+import android.widget.Toast;
+
+import com.julian.fullping.ui.home.HomeFragment;
 
 import java.util.ArrayList;
 
@@ -79,13 +83,15 @@ public class Datos_guardados extends Fragment {
         String datos= archivo.readDataFromFile(getActivity().getApplicationContext());
 
         final String array_datos [] = datos.split("\n");
+        Log.d("datos del archivo", datos);
 
         lista = (ListView) root.findViewById(R.id.lista);
 
         a = new ArrayList<String>(0);
         pos =new ArrayList<Integer>(0);
 
-        for (int i = array_datos.length-1; i >= 0; i--) {
+        //for (int i = array_datos.length-1; i >= 0; i--) {
+        for (int i = 0; i < array_datos.length; i++) {
             a.add(array_datos[i].split("%") [1]+" - " + array_datos[i].split("%")[0]);
             pos.add(i);
 
@@ -100,23 +106,43 @@ public class Datos_guardados extends Fragment {
                                          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                              a.get(position);
 
-                                             FragmentManager fm = getFragmentManager();
+                                             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-                                             if (fm != null) {
                                              Bundle bundle = new Bundle();
+                                             Log.d("myTag", array_datos[position]);
                                              bundle.putString("datos",array_datos[position]);
                                              Fragment fragment = new dato_seleccionado();
                                              fragment.setArguments(bundle);
 
-                                             FragmentTransaction ft = fm.beginTransaction();
-                                             ft.replace(R.id.container, fragment);
+                                             ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(Datos_guardados.this);
                                              ft.commit();
-                                             }
+
 
                                          }
                                      }
         );
 
+
+
+        volver = (Button) root.findViewById(R.id.button6);
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                Fragment fragment = new HomeFragment();
+                ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(Datos_guardados.this);
+                ft.commit();
+            }
+        });
+
         return root;
     }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+    }
+
 }

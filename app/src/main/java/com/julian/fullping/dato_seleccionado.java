@@ -24,7 +24,7 @@ public class dato_seleccionado extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "datos";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -37,7 +37,7 @@ public class dato_seleccionado extends Fragment {
     float max;
     float min;
     float packagelost;
-    double enviados;
+    float enviados;
 
     TextView tdate;
     TextView thost;
@@ -82,8 +82,8 @@ public class dato_seleccionado extends Fragment {
             average= Float.parseFloat(mParam1.split("%")[3]);
             max= Float.parseFloat(mParam1.split("%")[5]);
             min= Float.parseFloat(mParam1.split("%")[4]);
-            packagelost= Float.parseFloat(mParam1.split("%")[6]);
-            enviados= Double.parseDouble(mParam1.split("%")[2]);
+            packagelost= Float.parseFloat((mParam1.split("%")[6]));
+            enviados= Float.parseFloat((mParam1.split("%")[2]));
         }
     }
 
@@ -102,29 +102,24 @@ public class dato_seleccionado extends Fragment {
         tenviados = (TextView) root.findViewById(R.id.textView36);
 
         thost.setText(host);
-        tdate.setText("DATE:\n\n"+date);
-        taverage.setText("AVERAGE DELAY:\n\n"+String.valueOf(average));
-        tmax.setText("MAX. DELAY:\n\n"+String.valueOf(max));
-        tmin.setText("MIN. DELAY:\n\n"+String.valueOf(min));
-        tpackagelost.setText("PACKAGE LOST:\n\n"+String.valueOf(packagelost));
-        tenviados.setText("PACKAGE SENT:\n\n"+String.valueOf(enviados));
+        tdate.setText(date);
+        taverage.setText(String.valueOf(average)+" ms");
+        tmax.setText(String.valueOf(max)+" ms");
+        tmin.setText(String.valueOf(min)+" ms");
+        tpackagelost.setText(String.valueOf(packagelost));
+        tenviados.setText(String.valueOf(enviados));
 
         home=(Button) root.findViewById(R.id.button6);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getFragmentManager();
 
-                if (fm != null) {
-                    // Perform the FragmentTransaction to load in the list tab content.
-                    // Using FragmentTransaction#replace will destroy any Fragments
-                    // currently inside R.id.fragment_content and add the new Fragment
-                    // in its place.
-                    Fragment fragment = new HomeFragment();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.container, fragment);
-                    ft.commit();
-                }
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                Fragment fragment = new HomeFragment();
+                ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(dato_seleccionado.this);
+                ft.commit();
+
             }
         });
         delete=(Button) root.findViewById(R.id.button7);
@@ -149,18 +144,13 @@ public class dato_seleccionado extends Fragment {
                 try {
                     archivo.writeDataToFile(getActivity().getApplicationContext(), nuevos_datos);
                     Toast.makeText(getActivity().getApplicationContext(), "DATA DELETED", Toast.LENGTH_LONG).show();
-                    FragmentManager fm = getFragmentManager();
 
-                    if (fm != null) {
-                        // Perform the FragmentTransaction to load in the list tab content.
-                        // Using FragmentTransaction#replace will destroy any Fragments
-                        // currently inside R.id.fragment_content and add the new Fragment
-                        // in its place.
-                        Fragment fragment = new HomeFragment();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        ft.replace(R.id.container, fragment);
-                        ft.commit();
-                    }
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    Fragment fragment = new HomeFragment();
+                    ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(dato_seleccionado.this);
+                    ft.commit();
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -170,5 +160,11 @@ public class dato_seleccionado extends Fragment {
 
 
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
     }
 }

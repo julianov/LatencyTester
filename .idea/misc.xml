@@ -4,13 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/rounded_button.xml" value="0.1835" />
-        <entry key="app/src/main/res/layout/fragment_dato_seleccionado.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_datos_guardados.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_dato_seleccionado.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_datos_guardados.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.14990942028985507" />
-        <entry key="app/src/main/res/layout/fragment_guardar_datos.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_guardar_datos.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/fragment_trace_route.xml" value="0.14990942028985507" />
+        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/switch_item.xml" value="0.16077898550724637" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.33" />
+        <entry key="app/src/main/res/menu/home.xml" value="0.17" />
       </map>
     </option>
   </component>

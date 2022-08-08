@@ -9,7 +9,9 @@
         android:id="@+id/nav_home"
         android:name="com.julian.fullping.ui.home.HomeFragment"
         android:label="Network Tester"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +24,13 @@
         android:name="com.julian.fullping.ui.slideshow.SlideshowFragment"
         android:label="Share"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_guardados"
+        android:name="com.julian.fullping.Datos_guardados"
+        android:label="Saved data"
+        tools:layout="@layout/fragment_datos_guardados" >
+
+    </fragment>
+
 </navigation>

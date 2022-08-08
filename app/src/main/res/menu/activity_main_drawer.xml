@@ -16,5 +16,10 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_baseline_share_24"
             android:title="Share" />
+
+        <item
+            android:id="@+id/nav_guardados"
+            android:icon="@drawable/ic_baseline_save_24"
+            android:title="Saved data" />
     </group>
 </menu>

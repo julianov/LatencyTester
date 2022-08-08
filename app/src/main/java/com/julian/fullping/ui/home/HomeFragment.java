@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
+    SharedPreferences  sharedpreferences;
 
     private TextView txt;
     private Button btn;
@@ -144,6 +146,11 @@ public class HomeFragment extends Fragment {
                             timerHandler.postDelayed(timerRunnable, 0);
                             btn.setText("Stop");
                             gethost.getText().clear();
+
+                            sharedpreferences = getActivity().getSharedPreferences("host", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("host", host);
+                            editor.commit();
                         }
                         else{
 
@@ -195,29 +202,25 @@ public class HomeFragment extends Fragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getFragmentManager();
 
-                if (fm != null) {
-                    // Perform the FragmentTransaction to load in the list tab content.
-                    // Using FragmentTransaction#replace will destroy any Fragments
-                    // currently inside R.id.fragment_content and add the new Fragment
-                    // in its place.
+                    timerHandler.removeCallbacks(timerRunnable);
 
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
                     String datos=host+"%"+String.valueOf(enviados)+"%"+String.valueOf(average)+"%"+String.valueOf(min)+"%"+String.valueOf(max)+"%"+String.valueOf(packagelost);
                     Bundle bundle = new Bundle();
                     bundle.putString("datos",datos);
                     Fragment fragment = new guardar_datos();
                     fragment.setArguments(bundle);
-
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.container, fragment);
+                    ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(HomeFragment.this);
                     ft.commit();
-                }
+
             }
         });
 
         gethost=(EditText) root.findViewById(R.id.editText);
+        sharedpreferences = getActivity().getSharedPreferences("host", Context.MODE_PRIVATE);
+        gethost.setText(sharedpreferences.getString("host", ""));
         host=null;
 
         grafica= (LineChart) root.findViewById(R.id.LineChart);
@@ -489,5 +492,9 @@ public class HomeFragment extends Fragment {
         max=0;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
 }

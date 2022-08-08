@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,6 @@ public class guardar_datos extends Fragment {
             enviados= Double.parseDouble(mParam1.split("%")[1]);
 
         }
-        Toast.makeText(getActivity().getApplicationContext(), mParam1, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -98,12 +98,12 @@ public class guardar_datos extends Fragment {
         tpackagelost = (TextView) root.findViewById(R.id.textView25);
         tenviados = (TextView) root.findViewById(R.id.textView26);
 
-        thost.setText("HOST:\n\n"+host);
-        taverage.setText("AVERAGE DELAY:\n\n"+String.valueOf(average));
-        tmax.setText("MAX. DELAY:\n\n"+String.valueOf(max));
-        tmin.setText("MIN. DELAY:\n\n"+String.valueOf(min));
-        tpackagelost.setText("PACKAGE LOST:\n\n"+String.valueOf(packagelost));
-        tenviados.setText("PACKAGE SENT:\n\n"+String.valueOf(enviados));
+        thost.setText(host);
+        taverage.setText(String.valueOf(average)+" ms");
+        tmax.setText(String.valueOf(max)+" ms");
+        tmin.setText(String.valueOf(min)+" ms");
+        tpackagelost.setText(String.valueOf(packagelost));
+        tenviados.setText(String.valueOf(enviados));
 
         save=(Button) root.findViewById(R.id.button4);
         save.setOnClickListener(new View.OnClickListener() {
@@ -111,50 +111,100 @@ public class guardar_datos extends Fragment {
             public void onClick(View view) {
 
                 fileManager archivo = new fileManager("fullping.txt");
+                Log.d("dato", String.valueOf(archivo.if_exists() ));
+
                 String datos= archivo.readDataFromFile(getActivity().getApplicationContext());
 
-                Calendar calendar = Calendar.getInstance();
-                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                String date = dateFormat.format(calendar.getTime());
+                if (datos!=null && datos!=""){
 
-                String datos_nuevos=date+"%"+host+"%"+String.valueOf(enviados)+"%"+String.valueOf(average)+"%"+String.valueOf(min)+"%"+String.valueOf(max)+"%"+String.valueOf(packagelost)+"\n";
-                datos+=datos_nuevos;
+                    Log.d("dato", "aca debería llegar porque ya existe algo");
 
-                try {
-                    archivo.writeDataToFile(getActivity().getApplicationContext(), datos);
+                    //String datos= archivo.readDataFromFile(getActivity().getApplicationContext());
 
-                    Toast.makeText(getActivity().getApplicationContext(), "DATA SAVED", Toast.LENGTH_LONG).show();
-                    FragmentManager fm = getFragmentManager();
+                    Calendar calendar = Calendar.getInstance();
+                    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                    String date = dateFormat.format(calendar.getTime());
 
-                    if (fm != null) {
-                        // Perform the FragmentTransaction to load in the list tab content.
-                        // Using FragmentTransaction#replace will destroy any Fragments
-                        // currently inside R.id.fragment_content and add the new Fragment
-                        // in its place.
-                        Fragment fragment = new HomeFragment();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        ft.replace(R.id.container, fragment);
+                    int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minutes = calendar.get(Calendar.MINUTE);
+                    int seconds = calendar.get(Calendar.SECOND);
+
+                    String hora= String.valueOf(hour24hrs)+":"+String.valueOf(minutes)+":"+String.valueOf(seconds);
+
+                    String datos_nuevos=date+" - "+hora+"%"+host+"%"+String.valueOf(enviados)+"%"+String.valueOf(average)+"%"+String.valueOf(min)+"%"+String.valueOf(max)+"%"+String.valueOf(packagelost)+"\n";
+                    datos+=datos_nuevos;
+
+                    try {
+                        archivo.writeDataToFile(getActivity().getApplicationContext(), datos);
+
+                        Toast.makeText(getActivity().getApplicationContext(), "DATA SAVED", Toast.LENGTH_LONG).show();
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                        Fragment fragment = new Datos_guardados();
+                        ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(guardar_datos.this);
                         ft.commit();
+
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                        Fragment fragment = new HomeFragment();
+                        ft.replace(R.id.container, fragment).addToBackStack("tag").hide(guardar_datos.this);
+                        ft.commit();
+
                     }
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    FragmentManager fm = getFragmentManager();
+                }else{
 
-                    if (fm != null) {
-                        // Perform the FragmentTransaction to load in the list tab content.
-                        // Using FragmentTransaction#replace will destroy any Fragments
-                        // currently inside R.id.fragment_content and add the new Fragment
-                        // in its place.
-                        Fragment fragment = new HomeFragment();
-                        FragmentTransaction ft = fm.beginTransaction();
-                        ft.replace(R.id.container, fragment);
+                    Calendar calendar = Calendar.getInstance();
+                    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                    String date = dateFormat.format(calendar.getTime());
+
+                    int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minutes = calendar.get(Calendar.MINUTE);
+                    int seconds = calendar.get(Calendar.SECOND);
+
+                    String hora= String.valueOf(hour24hrs)+":"+String.valueOf(minutes)+":"+String.valueOf(seconds);
+
+
+                    String datos_nuevos=date+" - "+hora+"%"+host+"%"+String.valueOf(enviados)+"%"+String.valueOf(average)+"%"+String.valueOf(min)+"%"+String.valueOf(max)+"%"+String.valueOf(packagelost)+"\n";
+
+                    try {
+                        archivo.writeDataToFile(getActivity().getApplicationContext(), datos_nuevos);
+
+                        Toast.makeText(getActivity().getApplicationContext(), "DATA SAVED", Toast.LENGTH_LONG).show();
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                        Fragment fragment = new Datos_guardados();
+                        ft.replace(R.id.nav_host_fragment, fragment).addToBackStack("tag").hide(guardar_datos.this);
                         ft.commit();
+
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+                        Fragment fragment = new HomeFragment();
+                        ft.replace(R.id.container, fragment).addToBackStack("tag").hide(guardar_datos.this);
+                        ft.commit();
+
                     }
+
+
                 }
+
+
+
             }
         });
 
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
     }
 }
